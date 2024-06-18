@@ -1,0 +1,132 @@
+definitions:
+  gin.H:
+    additionalProperties: {}
+    type: object
+  models.Availability:
+    properties:
+      end_time:
+        description: |-
+          The end time of the availability
+          required: true
+          example: 2023-06-18T17:00:00Z
+        type: string
+      id:
+        description: |-
+          The ID of the availability record
+          required: true
+          example: 1
+        type: integer
+      start_time:
+        description: |-
+          The start time of the availability
+          required: true
+          example: 2023-06-18T15:00:00Z
+        type: string
+      user_id:
+        description: |-
+          The ID of the user
+          required: true
+          example: 123
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /availability:
+    post:
+      consumes:
+      - application/json
+      description: Create availability for a user
+      parameters:
+      - description: Availability
+        in: body
+        name: availability
+        required: true
+        schema:
+          $ref: '#/definitions/models.Availability'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Availability'
+        "400":
+          description: error response
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: error response
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Create availability for a user
+      tags:
+      - availability
+  /availability/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get availability for a given user ID
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Availability'
+            type: array
+        "400":
+          description: error response
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: error response
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get availability for a user
+      tags:
+      - availability
+  /overlap/{user_id1}/{user_id2}:
+    get:
+      consumes:
+      - application/json
+      description: Find overlapping availability between two users
+      parameters:
+      - description: User ID 1
+        in: path
+        name: user_id1
+        required: true
+        type: integer
+      - description: User ID 2
+        in: path
+        name: user_id2
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Availability'
+            type: array
+        "400":
+          description: error response
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: error response
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Find overlapping availability between two users
+      tags:
+      - availability
+swagger: "2.0"

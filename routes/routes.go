@@ -11,6 +11,7 @@ import (
 )
 
 func SetupRoutes(router *gin.Engine) {
+	// the swagger file is served at /swagger/index.html, it is a quick hack I implemented to quickly test and validate the code
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	router.GET("/availability/:user_id", controllers.GetAvailability)

@@ -17,6 +17,6 @@ func InitDB() {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
 
-	// Migrate the schema
+	// Migrate the schema; this will create the table if it doesn't exist
 	DB.AutoMigrate(&models.Availability{})
 }

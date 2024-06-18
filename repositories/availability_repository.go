@@ -18,7 +18,19 @@ func CreateAvailability(availability *models.Availability) error {
 
 func GetOverlappingAvailabilities(userID1, userID2 uint) ([]models.Availability, error) {
 	var availabilities []models.Availability
-	query := `SELECT * FROM availabilities WHERE user_id IN (?, ?) AND start_time < (SELECT end_time FROM availabilities WHERE user_id = ? ORDER BY end_time DESC LIMIT 1) AND end_time > (SELECT start_time FROM availabilities WHERE user_id = ? ORDER BY start_time ASC LIMIT 1)`
+	// I generated this quick query using copilot
+	query := `
+	SELECT * FROM availabilities 
+	WHERE user_id IN (?, ?) AND 
+	start_time < (
+		SELECT end_time FROM availabilities 
+		WHERE user_id = ? 
+		ORDER BY end_time DESC LIMIT 1
+	) AND end_time > (
+		SELECT start_time FROM availabilities 
+		WHERE user_id = ? 
+		ORDER BY start_time ASC LIMIT 1
+	)`
 	result := config.DB.Raw(query, userID1, userID2, userID1, userID2).Scan(&availabilities)
 	return availabilities, result.Error
 }
